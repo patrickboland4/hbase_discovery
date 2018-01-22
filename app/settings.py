@@ -1,10 +1,5 @@
-from os import getenv
 from collections import namedtuple
-import discovery
-import pdb
-pdb.set_trace()
-
-print settings, values
+from os import getenv
 
 hbase_defaults = {
     'HBASE_HOST_ADDR': '172.17.0.2',
@@ -15,7 +10,8 @@ hbase_defaults = {
     'BACKEND_STORAGE': 'HBase'
     }
 
-for name, value in defaults.items():
+values = {}
+for name, value in hbase_defaults.items():
     if isinstance(value, bool):
         values[name] = bool(getenv(name, value))
     elif isinstance(value, int):
@@ -24,4 +20,3 @@ for name, value in defaults.items():
         values[name] = getenv(name, value)
 
 value = namedtuple('Settings', values.keys())(**values)
-print "Value is", value

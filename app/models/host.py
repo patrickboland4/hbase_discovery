@@ -1,3 +1,7 @@
+import happybase
+
+from plugins.HBase.app import settings
+
 class HappyHost():
     """
     HBase Host
