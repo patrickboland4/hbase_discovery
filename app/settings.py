@@ -12,11 +12,6 @@ hbase_defaults = {
 
 values = {}
 for name, value in hbase_defaults.items():
-    if isinstance(value, bool):
-        values[name] = bool(getenv(name, value))
-    elif isinstance(value, int):
-        values[name] = int(getenv(name, value))
-    elif isinstance(value, basestring):
-        values[name] = getenv(name, value)
+    values[name] = value
 
 value = namedtuple('Settings', values.keys())(**values)

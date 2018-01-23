@@ -1,15 +1,14 @@
 import abc
 import json
+import datetime
 
 from app.services.query import QueryBackend
 from plugins.HBase.app.models.host import HappyHost
-from plugins.HBase.app.utils import json_utils
+from plugins.HBase.app.utils.json_utils import DateTimeEncoder
+from plugins.HBase.app import settings
 
 
 class HBaseQueryBackend(QueryBackend):
-    import pdb
-    print 'setting hbase backend obj'
-    pdb.set_trace()
     def __init__(self):
         self.h_host = HappyHost()
 
@@ -25,7 +24,8 @@ class HBaseQueryBackend(QueryBackend):
     def query_secondary_index(self, service_repo_name):
         pass
 
-    def get(self, service, ip_address, port):
+    def get(self, service, ip_address):
+        port = self.h_host.port
         row_key = str(self.h_host.create_compound_row_key(service, ip_address, port))
         try:
             result = list(self.h_host.service_table.scan(row_prefix=row_key))
@@ -63,7 +63,6 @@ class HBaseQueryBackend(QueryBackend):
         service = host.get('service')
         host_addr = host.get('ip_address')
         port = host.get('port')
-        pdb.set_trace()
         host_json = json.dumps(host, cls=DateTimeEncoder)
         compound_row_key = self.h_host.create_compound_row_key(service, host_addr, port)
         self.h_host.service_table.put(row=compound_row_key, data={"cf0:value": host_json})
